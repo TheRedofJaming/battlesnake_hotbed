@@ -3,6 +3,15 @@ package hotbed
 // API Objects
 // https://docs.battlesnake.com/api
 
+type move string
+
+const (
+	UP    move = "up"
+	DOWN  move = "down"
+	LEFT  move = "left"
+	RIGHT move = "right"
+)
+
 type Point struct {
 	X int `json:"x"`
 	Y int `json:"y"`
