@@ -1,7 +1,7 @@
 package hotbed
 
 //  No detection for head-head collisions. Other snakes are simply declared ilegal.
-func LegalMoves[PS Point | Snake](b Board, start PS) (legal []move) {
+func LegalMoveStateGeneration[PS Point | Snake](b Board, start PS, former Point) (legal []move) {
 	var p Point
 	if snake, ok := any(start).(Snake); ok { // if a snake is passed into the function, use it's Head directly.
 		p = snake.Head
@@ -32,9 +32,11 @@ func LegalMoves[PS Point | Snake](b Board, start PS) (legal []move) {
 	}
 	for _, snake := range b.Snakes {
 		for _, s := range snake.Body {
-			impossiblePoints[s] = true
+			impossiblePoints[s] = true // can't build snake bodies inside snake bodies
 		}
+		impossiblePoints[snake.Head] = false // but building them inside head is leagl during state-generation
 	}
+	impossiblePoints[former] = true
 	for move, p := range probablePoints {
 		if !impossiblePoints[p] {
 			legal = append(legal, move)
